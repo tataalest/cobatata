@@ -1,7 +1,7 @@
 <?php
 // Inisialisasi variabel untuk menyimpan nilai input dan error
-$nama = $email = $nomor = $mobil = $alamat = "";
-$namaErr = $emailErr = $nomorErr = $alamatErr = "";
+$nama = $alamat = $shipping = $crunchybite = $payment = "";
+$namaErr = $alamatErr = $shippingErr = $paymentErr = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validasi Nama
@@ -10,28 +10,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $namaErr = "Nama wajib diisi";
     }
 
-    // Validasi Email
-    $email = $_POST["email"];
-    if (empty($email)) {
-        $emailErr = "Email wajib diisi";
-    }
-
-    // Validasi Nomor Telepon
-    $nomor = $_POST["nomor"];
-    if (empty($nomor)) {
-        $nomorErr = "Nomor Telepon wajib diisi";
-    } elseif (!ctype_digit($nomor)) {
-        $nomorErr = "Nomor Telepon harus berupa angka";
-    }
-
     // Validasi Alamat
     $alamat = $_POST["alamat"];
     if (empty($alamat)) {
         $alamatErr = "Alamat wajib diisi";
     }
 
-    // Menyimpan pilihan mobil tanpa validasi khusus
-    $mobil = $_POST["mobil"];
+    // Validasi Jasa Pengiriman
+    $shipping = $_POST["shipping"];
+    if (empty($shipping)) {
+        $shippingErr = "Jasa Pengiriman wajib dipilih";
+    }
+
+    // Validasi Metode Pembayaran
+    $payment = $_POST["payment"];
+    if (empty($payment)) {
+        $paymentErr = "Metode Pembayaran wajib dipilih";
+    }
+
+    // Menyimpan pilihan CrunchyBite tanpa validasi khusus
+    $crunchybite = $_POST["crunchybite"];
 }
 ?>
 
@@ -41,13 +39,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Pembelian Mobil</title>
+    <title>Form Pembelian CrunchyBite</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div class="container">
-        <h2>Form Pembelian Mobil</h2>
+        <h2>Form Pembelian CrunchyBite</h2>
         <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
             <div class="form-group">
                 <label for="nama">Nama:</label>
@@ -56,24 +54,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="text" id="email" name="email" value="<?php echo $email; ?>">
-                <span class="error"><?php echo $emailErr ? "* $emailErr" : ""; ?></span>
-            </div>
-
-            <div class="form-group">
-                <label for="nomor">Nomor Telepon:</label>
-                <input type="text" id="nomor" name="nomor" value="<?php echo $nomor; ?>">
-                <span class="error"><?php echo $nomorErr ? "* $nomorErr" : ""; ?></span>
-            </div>
-
-            <div class="form-group">
-                <label for="mobil">Pilih Mobil:</label>
-                <select id="mobil" name="mobil">
-                    <option value="Sedan" <?php echo ($mobil == "Sedan") ? "selected" : ""; ?>>Sedan</option>
-                    <option value="SUV" <?php echo ($mobil == "SUV") ? "selected" : ""; ?>>SUV</option>
-                    <option value="Hatchback" <?php echo ($mobil == "Hatchback") ? "selected" : ""; ?>>Hatchback
-                    </option>
+                <label for="crunchybite">Pilih Menu:</label>
+                <select id="crunchybite" name="crunchybite">
+                    <option value="Kastangel" <?php echo ($crunchybite == "Kastangel") ? "selected" : ""; ?>>Kastangel</option>
+                    <option value="Nastar" <?php echo ($crunchybite == "Nastar") ? "selected" : ""; ?>>Nastar</option>
+                    <option value="Kue Cubir" <?php echo ($crunchybite == "Kue Cubir") ? "selected" : ""; ?>>Kue Cubir</option>
                 </select>
             </div>
 
@@ -83,13 +68,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <span class="error"><?php echo $alamatErr ? "* $alamatErr" : ""; ?></span>
             </div>
 
+            <div class="form-group">
+                <label for="shipping">Jasa Pengiriman:</label>
+                <select id="shipping" name="shipping">
+                    <option value="" <?php echo ($shipping == "") ? "selected" : ""; ?>>Pilih Jasa Pengiriman</option>
+                    <option value="JNE" <?php echo ($shipping == "JNE") ? "selected" : ""; ?>>JNE</option>
+                    <option value="TIKI" <?php echo ($shipping == "TIKI") ? "selected" : ""; ?>>TIKI</option>
+                    <option value="POS" <?php echo ($shipping == "POS") ? "selected" : ""; ?>>POS Indonesia</option>
+                    <option value="GoSend" <?php echo ($shipping == "GoSend") ? "selected" : ""; ?>>GoSend</option>
+                    <option value="GrabExpress" <?php echo ($shipping == "GrabExpress") ? "selected" : ""; ?>>GrabExpress</option>
+                </select>
+                <span class="error"><?php echo $shippingErr ? "* $shippingErr" : ""; ?></span>
+            </div>
+
+            <div class="form-group">
+                <label for="payment">Metode Pembayaran:</label>
+                <select id="payment" name="payment">
+                    <option value="" <?php echo ($payment == "") ? "selected" : ""; ?>>Pilih Metode Pembayaran</option>
+                    <option value="Transfer Bank" <?php echo ($payment == "Transfer Bank") ? "selected" : ""; ?>>Transfer Bank</option>
+                    <option value="E-Wallet" <?php echo ($payment == "E-Wallet") ? "selected" : ""; ?>>E-Wallet</option>
+                    <option value="COD" <?php echo ($payment == "COD") ? "selected" : ""; ?>>COD</option>
+                    <option value="Kartu Kredit" <?php echo ($payment == "Kartu Kredit") ? "selected" : ""; ?>>Kartu Kredit</option>
+                </select>
+                <span class="error"><?php echo $paymentErr ? "* $paymentErr" : ""; ?></span>
+            </div>
+
             <div class="button-container">
-                <button type="submit">Beli Mobil</button>
+                <button type="submit">Beli CrunchyBite</button>
             </div>
         </form>
     </div>
 
-    <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && !$namaErr && !$emailErr && !$nomorErr && !$alamatErr) { ?>
+    <?php if ($_SERVER["REQUEST_METHOD"] == "POST" && !$namaErr && !$alamatErr && !$shippingErr && !$paymentErr) { ?>
     <div class="container">
         <h3>Data Pembelian:</h3>
         <div class="table-container">
@@ -97,21 +107,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <thead>
                     <tr>
                         <th width="20%">Nama</th>
-                        <th width="20%">Email</th>
-                        <th width="15%">Nomor Telepon</th>
-                        <th width="15%">Mobil</th>
+                        <th width="20%">Pilih Menu</th>
                         <th width="30%">Alamat Pengiriman</th>
+                        <th width="15%">Jasa Pengiriman</th>
+                        <th width="15%">Metode Pembayaran</th>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><?php echo $nama; ?></td>
-                        <td><?php echo $email; ?></td>
-                        <td><?php echo $nomor; ?></td>
-                        <td><?php echo $mobil; ?></td>
-                        <td><?php echo $alamat; ?></td>
-                    </tr>
-                </tbody>
+                 </tbody>
             </table>
         </div>
     </div>
